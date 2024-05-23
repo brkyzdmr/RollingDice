@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Audio
+  m_EditorClassIdentifier: 
+  m_GroupName: Audio
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 1f4bf51cac479d54fb821110bba7fbf5
+  m_SerializeEntries:
+  - m_GUID: 7982ed86bec32214e88b79fed65914d3
+    m_Address: Audio/DiceCollideDiceSFx.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 545def57db9604a4baf4ab2cbffaa46a
+    m_Address: Audio/DiceCollideFloorSFx.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a0ad6d48a42d354438fac9276a6603e0
+    m_Address: Audio/DiceResultDingSFx.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: d1efed95e75bd664884ff087f22509d9, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: ba75ade2df8c9dc4d9e879f99ecddce5, type: 2}
+    - {fileID: 11400000, guid: 8b7d3580fc4f0ce4b9555e0655370c04, type: 2}
