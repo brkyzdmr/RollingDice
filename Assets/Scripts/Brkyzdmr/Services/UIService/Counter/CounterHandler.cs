@@ -1,13 +1,12 @@
 ﻿using System;
 
-
 namespace Brkyzdmr.Services.UIService
 {
     public class CounterHandler : ICounterHandler
     {
         private int _value;
-        private readonly int _min;
-        private readonly int _max;
+        private int _min;
+        private int _max;
 
         public int Value => _value;
 
@@ -15,15 +14,21 @@ namespace Brkyzdmr.Services.UIService
         public event Action OnValueMax;
         public event Action OnValueValid;
 
-        public CounterHandler(int min, int max)
+        protected CounterHandler(int min, int max)
+        {
+            _min = min;
+            _max = max;
+        }
+        
+        public void SetMinMax(int min, int max)
         {
             _min = min;
             _max = max;
         }
 
-        public void ChangeValue(int delta)
+        public virtual void SetValue(int value)
         {
-            _value += delta;
+            _value = value;
 
             if (_value <= _min)
             {

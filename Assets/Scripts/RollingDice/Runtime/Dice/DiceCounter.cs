@@ -1,5 +1,6 @@
 ﻿using System;
 using Brkyzdmr.Services;
+using Brkyzdmr.Services.ConfigService;
 using Brkyzdmr.Services.EventService;
 using Brkyzdmr.Services.UIService;
 using RollingDice.Runtime.Event;
@@ -14,17 +15,16 @@ namespace RollingDice.Runtime.Dice
         [SerializeField] protected TMP_Text countText;
         [SerializeField] protected Button increaseButton;
         [SerializeField] protected Button decreaseButton;
-
-        private CounterHandler _counterHandler;
+        
         private IEventService _eventService;
+        private IConfigService _configService;
+        private ICounterHandler _counterHandler;
 
         private void Awake()
         {
             _eventService = Services.GetService<IEventService>();
-            _counterHandler = new CounterHandler(0, 50);
-            _counterHandler.OnValueZero += OnValueZero;
-            _counterHandler.OnValueMax += OnValueMax;
-            _counterHandler.OnValueValid += OnValueValid;
+            _configService = Services.GetService<IConfigService>();
+            _counterHandler = new ButtonCounterHandler(increaseButton, decreaseButton, 0, 2);
         }
         
         private void Start()
@@ -34,21 +34,21 @@ namespace RollingDice.Runtime.Dice
             UpdateUI();
         }
 
-        private void OnDestroy()
-        {
-            _counterHandler.OnValueZero -= OnValueZero;
-            _counterHandler.OnValueMax -= OnValueMax;
-            _counterHandler.OnValueValid -= OnValueValid;
-        }
-
         private void OnEnable()
         {
             _eventService.Get<OnDiceCountChanged>().AddListener(UpdateCountText);
+            _eventService.Get<OnGameConfigLoaded>().AddListener(OnGameConfigLoaded);
         }
 
         private void OnDisable()
         {
             _eventService.Get<OnDiceCountChanged>().RemoveListener(UpdateCountText);
+            _eventService.Get<OnGameConfigLoaded>().RemoveListener(OnGameConfigLoaded);
+        }
+
+        private void OnGameConfigLoaded()
+        {
+            _counterHandler.SetMinMax(0, _configService.gameConfig.maxDiceCount);
         }
 
         private void ChangeCount(int change)
@@ -60,30 +60,13 @@ namespace RollingDice.Runtime.Dice
 
         private void UpdateCountText(int value)
         {
-            _counterHandler.ChangeValue(value);
-            countText.text = _counterHandler.Value.ToString();
+            _counterHandler.SetValue(value);
+            UpdateUI();
         }
 
         private void UpdateUI()
         {
             countText.text = _counterHandler.Value.ToString();
         }
-
-        private void OnValueZero()
-        {
-            decreaseButton.interactable = false;
-        }
-
-        private void OnValueMax()
-        {
-            increaseButton.interactable = false;
-        }
-
-        private void OnValueValid()
-        {
-            increaseButton.interactable = true;
-            decreaseButton.interactable = true;
-        }
-
     }
 }

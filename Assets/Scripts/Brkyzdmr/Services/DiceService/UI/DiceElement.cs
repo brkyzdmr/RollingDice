@@ -18,7 +18,7 @@ namespace Brkyzdmr.Services.DiceService
         [SerializeField] private Button increaseButton;
         [SerializeField] private Button decreaseButton;
 
-        private CounterHandler _counterHandler;
+        private ICounterHandler _counterHandler;
         private IEventService _eventService;
         private IDiceService _diceService;
 
@@ -26,10 +26,7 @@ namespace Brkyzdmr.Services.DiceService
         {
             _diceService = Services.GetService<IDiceService>();
             _eventService = Services.GetService<IEventService>();
-            _counterHandler = new CounterHandler(0, 50);
-            _counterHandler.OnValueZero += OnValueZero;
-            _counterHandler.OnValueMax += OnValueMax;
-            _counterHandler.OnValueValid += OnValueValid;
+            _counterHandler = new ButtonCounterHandler(increaseButton, decreaseButton, 0, 2);
         }
 
         private void Start()
@@ -39,21 +36,21 @@ namespace Brkyzdmr.Services.DiceService
             UpdateUI();
         }
 
-        private void OnDestroy()
-        {
-            _counterHandler.OnValueZero -= OnValueZero;
-            _counterHandler.OnValueMax -= OnValueMax;
-            _counterHandler.OnValueValid -= OnValueValid;
-        }
-
         private void OnEnable()
         {
             _eventService.Get<OnGuaranteeCountChanged>().AddListener(UpdateUI);
+            _eventService.Get<OnGameConfigLoaded>().AddListener(OnGameConfigLoaded);
         }
 
         private void OnDisable()
         {
             _eventService.Get<OnGuaranteeCountChanged>().RemoveListener(UpdateUI);
+            _eventService.Get<OnGameConfigLoaded>().RemoveListener(OnGameConfigLoaded);
+        }
+
+        private void OnGameConfigLoaded()
+        {
+            
         }
 
         public void PlusValue()
@@ -84,37 +81,8 @@ namespace Brkyzdmr.Services.DiceService
         public void UpdateUI()
         {
             countText.text = diceValueCount.ToString();
-            _counterHandler.ChangeValue(diceValueCount);
-
-            if (diceValueCount <= 0)
-            {
-                OnValueZero();
-            }
-            else
-            {
-                OnValueValid();
-            }
-
-            if (diceGuarantee.totalCount >= diceGuarantee.diceCount)
-            {
-                OnValueMax();
-            }
-        }
-
-        private void OnValueZero()
-        {
-            decreaseButton.interactable = false;
-        }
-
-        private void OnValueMax()
-        {
-            increaseButton.interactable = false;
-        }
-
-        private void OnValueValid()
-        {
-            increaseButton.interactable = true;
-            decreaseButton.interactable = true;
+            _counterHandler.SetMinMax(0, diceGuarantee.diceCount);
+            _counterHandler.SetValue(diceValueCount);
         }
     }
 }
