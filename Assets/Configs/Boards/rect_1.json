@@ -1,0 +1,6 @@
+{
+  "id": "rect_1",
+  "boardType": 0, 
+  "tileCount": 20,
+  "prefabPath": "Boards/Board_6x6Rectangle.prefab"
+}

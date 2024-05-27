@@ -1,0 +1,6 @@
+{
+  "maxDiceCount": 50,
+  "levelOrder": [
+    "Configs/Levels/1.json"
+  ]
+}
