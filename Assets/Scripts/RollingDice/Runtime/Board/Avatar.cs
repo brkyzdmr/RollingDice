@@ -86,6 +86,8 @@ namespace RollingDice.Runtime.Board
                 yield return new WaitUntil(() => !isMoving);
                 _tilesMoved++; // Increment the number of tiles moved
             }
+            
+            _eventService.Get<OnAvatarMoveCompleted>().Execute();
             ResetTileCounter();
         }
 

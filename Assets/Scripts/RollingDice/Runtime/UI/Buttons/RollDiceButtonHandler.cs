@@ -1,4 +1,5 @@
-﻿using Brkyzdmr.Services.EventService;
+﻿using Brkyzdmr.Services.DiceService;
+using Brkyzdmr.Services.EventService;
 using Brkyzdmr.Services.UIService;
 using Brkyzdmr.Tools.EzTween;
 using RollingDice.Runtime.Event;
@@ -8,11 +9,19 @@ namespace RollingDice.Runtime.UI
 {
     public class RollDiceButtonHandler : ButtonHandler
     {
-        public RollDiceButtonHandler(IEventService eventService) : base(eventService) { }
+        private readonly IDiceService _diceService;
+
+        public RollDiceButtonHandler(IEventService eventService, IDiceService diceService) : base(eventService)
+        {
+            _diceService = diceService;
+            eventService.Get<OnAvatarMoveCompleted>().AddListener(() => SetButtonStatus(true));
+        }
 
         public override void HandleButtonClicked()
         {
+            if (_diceService.diceCount <= 0) { return; }
             EventService.Get<OnRollDiceButtonClicked>().Execute();
+            SetButtonStatus(false);
         }
 
         public void PlayScaleAnimation(Transform playButton)

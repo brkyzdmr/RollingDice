@@ -26,5 +26,5 @@ namespace RollingDice.Runtime.Event
     // Game Events
     public class OnDiceRolled : GameEvent<List<int>> { }
     public class OnDiceCountChanged : GameEvent<int> { }
-    public class OnGuaranteeCountChanged : GameEvent<int> { }
+    public class OnAvatarMoveCompleted : GameEvent { }
 }

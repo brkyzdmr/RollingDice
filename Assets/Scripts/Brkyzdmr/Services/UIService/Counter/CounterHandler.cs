@@ -13,6 +13,7 @@ namespace Brkyzdmr.Services.UIService
         public event Action OnValueZero;
         public event Action OnValueMax;
         public event Action OnValueValid;
+        public event Action OnValueNotValid;
 
         protected CounterHandler(int min, int max)
         {
@@ -26,23 +27,29 @@ namespace Brkyzdmr.Services.UIService
             _max = max;
         }
 
-        public virtual void SetValue(int value)
+        public void ChechIsValueValid(int value, int remainingValue)
         {
             _value = value;
-
-            if (_value <= _min)
+            
+            if (value == 0 && remainingValue == 0)
             {
-                _value = _min;
-                OnValueZero?.Invoke();
+                OnValueNotValid?.Invoke();
             }
-            else if (_value >= _max)
-            {
-                _value = _max;
-                OnValueMax?.Invoke();
-            }
-            else
+            else if (value > _min && remainingValue > 0)
             {
                 OnValueValid?.Invoke();
+            }
+            else if (value < _max && remainingValue > 0)
+            {
+                OnValueValid?.Invoke();
+            }
+            else if (_value == _min)
+            {
+                OnValueZero?.Invoke();
+            }
+            else if (_value == _max)
+            {
+                OnValueMax?.Invoke();
             }
         }
     }

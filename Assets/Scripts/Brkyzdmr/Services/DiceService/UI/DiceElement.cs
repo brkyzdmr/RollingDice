@@ -33,18 +33,17 @@ namespace Brkyzdmr.Services.DiceService
         {
             increaseButton.onClick.AddListener(PlusValue);
             decreaseButton.onClick.AddListener(MinusValue);
-            UpdateUI();
         }
 
         private void OnEnable()
         {
-            _eventService.Get<OnGuaranteeCountChanged>().AddListener(UpdateUI);
+            _eventService.Get<OnDiceCountChanged>().AddListener(UpdateState);
             _eventService.Get<OnGameConfigLoaded>().AddListener(OnGameConfigLoaded);
         }
 
         private void OnDisable()
         {
-            _eventService.Get<OnGuaranteeCountChanged>().RemoveListener(UpdateUI);
+            _eventService.Get<OnDiceCountChanged>().RemoveListener(UpdateState);
             _eventService.Get<OnGameConfigLoaded>().RemoveListener(OnGameConfigLoaded);
         }
 
@@ -74,15 +73,14 @@ namespace Brkyzdmr.Services.DiceService
         private void UpdateState()
         {
             diceGuarantee.UpdateDiceValueCount(diceValue, diceValueCount);
-            UpdateUI();
-            _eventService.Get<OnGuaranteeCountChanged>().Execute();
         }
 
         public void UpdateUI()
         {
+            var remainingDiceCount = diceGuarantee.GetRemainingDiceCount();
             countText.text = diceValueCount.ToString();
             _counterHandler.SetMinMax(0, diceGuarantee.diceCount);
-            _counterHandler.SetValue(diceValueCount);
+            _counterHandler.ChechIsValueValid(diceValueCount,remainingDiceCount);
         }
     }
 }

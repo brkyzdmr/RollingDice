@@ -1,36 +1,46 @@
-﻿using UnityEngine.UI;
+﻿using Brkyzdmr.Services.UIService;
+using UnityEngine;
+using UnityEngine.UI;
 
-namespace Brkyzdmr.Services.UIService
+public class ButtonCounterHandler : CounterHandler
 {
-    public class ButtonCounterHandler : CounterHandler
+    private readonly Button _increaseButton;
+    private readonly Button _decreaseButton;
+
+    public ButtonCounterHandler(Button increaseButton, Button decreaseButton, int min, int max) : base(min, max)
     {
-        private readonly Button _increaseButton;
-        private readonly Button _decreaseButton;
+        _increaseButton = increaseButton;
+        _decreaseButton = decreaseButton;
+        
+        OnValueZero += HandleOnValueZero;
+        OnValueValid += HandleOnValueValid;
+        OnValueMax += HandleOnValueMax;
+        OnValueNotValid += HandleOnValueNotValid;
+    }
 
-        public ButtonCounterHandler(Button increaseButton, Button decreaseButton, int min, int max) : base(min, max)
-        {
-            _increaseButton = increaseButton;
-            _decreaseButton = decreaseButton;
-            
-            OnValueZero += OnOnValueZero;
-            OnValueValid += OnOnValueValid;
-            OnValueMax += OnOnValueMax;
-        }
+    private void HandleOnValueZero()
+    {
+        Debug.Log("HandleOnValueZero");
+        _decreaseButton.interactable = false;
+    }
 
-        private void OnOnValueZero()
-        {
-            _decreaseButton.interactable = false;
-        }
+    private void HandleOnValueValid()
+    {
+        Debug.Log("HandleOnValueValid");
+        _increaseButton.interactable = true;
+        _decreaseButton.interactable = true;
+    }
 
-        private void OnOnValueValid()
-        {
-            _increaseButton.interactable = true;
-            _decreaseButton.interactable = true;
-        }
+    private void HandleOnValueMax()
+    {
+        Debug.Log("HandleOnValueMax");
+        _increaseButton.interactable = false;
+    }
 
-        private void OnOnValueMax()
-        {
-            _increaseButton.interactable = false;
-        }
+    private void HandleOnValueNotValid()
+    {
+        Debug.Log("HandleOnValueNotValid");
+        _increaseButton.interactable = false;
+        _decreaseButton.interactable = false;
     }
 }

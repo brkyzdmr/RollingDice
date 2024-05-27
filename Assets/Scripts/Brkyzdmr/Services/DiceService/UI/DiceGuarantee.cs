@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Brkyzdmr.Services.ConfigService;
 using Brkyzdmr.Services.EventService;
 using RollingDice.Runtime.Event;
@@ -8,14 +9,16 @@ namespace Brkyzdmr.Services.DiceService
 {
     public class DiceGuarantee : MonoBehaviour
     {
+        public int diceCount;
+        public int totalCount;
+        
         private List<int> _diceGuaranteeCount;
         private List<DiceElement> _diceElementList;
 
         private IDiceService _diceService;
         private IEventService _eventService;
         private IConfigService _configService;
-        public int diceCount;
-        public int totalCount;
+
 
         private void Awake()
         {
@@ -25,21 +28,29 @@ namespace Brkyzdmr.Services.DiceService
 
             _diceGuaranteeCount = new List<int>(new int[6]);
             _diceElementList = new List<DiceElement>(6);
+            InitializeDiceElements();
         }
 
         private void OnEnable()
         {
             _eventService.Get<OnDiceCountChanged>().AddListener(ChangeDiceCount);
-            _eventService.Get<OnGameConfigLoaded>().AddListener(InitializeGuaranteeCount);
+            _eventService.Get<OnGameConfigLoaded>().AddListener(OnGameConfigLoaded);
         }
 
         private void OnDisable()
         {
             _eventService.Get<OnDiceCountChanged>().RemoveListener(ChangeDiceCount);
-            _eventService.Get<OnGameConfigLoaded>().RemoveListener(InitializeGuaranteeCount);
+            _eventService.Get<OnGameConfigLoaded>().RemoveListener(OnGameConfigLoaded);
         }
 
-        private void InitializeGuaranteeCount()
+        private void InitializeDiceElements()
+        {
+            var diceElements = transform.GetComponentsInChildren<DiceElement>();
+
+            _diceElementList = diceElements.ToList();
+        }
+
+        private void OnGameConfigLoaded()
         {
             for (int i = 0; i < 6; i++)
             {
@@ -50,6 +61,14 @@ namespace Brkyzdmr.Services.DiceService
         private void ChangeDiceCount(int count)
         {
             diceCount = count;
+            
+            UpdateGuarantee();
+            UpdateUIElement();
+        }
+
+        public int GetRemainingDiceCount()
+        {
+            return _diceService.targetedResult.Count(dice => dice == DiceValue.Any);
         }
 
         public void UpdateDiceValueCount(DiceValue diceValue, int value)
@@ -66,8 +85,8 @@ namespace Brkyzdmr.Services.DiceService
                 totalCount += count;
             }
 
-            UpdateUIElement();
             UpdateGuarantee();
+            UpdateUIElement();
         }
 
         private void UpdateUIElement()
@@ -80,7 +99,7 @@ namespace Brkyzdmr.Services.DiceService
 
         private void UpdateGuarantee()
         {
-            int remainingDice = _diceService.diceCount - 1;
+            var remainingDice = _diceService.diceCount - 1;
 
             for (int i = 0; i < _diceGuaranteeCount.Count; i++)
             {

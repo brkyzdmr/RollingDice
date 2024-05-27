@@ -2,6 +2,7 @@
 using System.Linq;
 using Brkyzdmr.Services;
 using Brkyzdmr.Services.CoroutineService;
+using Brkyzdmr.Services.DiceService;
 using Brkyzdmr.Services.EventService;
 using Brkyzdmr.Services.UIService;
 using RollingDice.Runtime.Dice;
@@ -20,18 +21,21 @@ namespace RollingDice.Runtime.UI.Panels
         
 
         private IEventService _eventService;
+        private IDiceService _diceService;
         private ICoroutineService _coroutineService;
         private RollDiceButtonHandler _rollDiceButtonHandler;
 
         private void Awake()
         {
             _eventService = Services.GetService<IEventService>();
+            _diceService = Services.GetService<IDiceService>();
             _coroutineService = Services.GetService<ICoroutineService>();
         }
 
         private void Start()
         {
-            _rollDiceButtonHandler = new RollDiceButtonHandler(_eventService);
+            _rollDiceButtonHandler = new RollDiceButtonHandler(_eventService, _diceService);
+            _rollDiceButtonHandler.SetButton(rollDiceButton);
             rollDiceButton.onClick.AddListener(_rollDiceButtonHandler.HandleButtonClicked);
             _rollDiceButtonHandler.PlayScaleAnimation(rollDiceButton.transform);
             SetDiceResultStatus(false);

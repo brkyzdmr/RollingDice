@@ -1,6 +1,7 @@
 ﻿using System;
 using Brkyzdmr.Services;
 using Brkyzdmr.Services.ConfigService;
+using Brkyzdmr.Services.DiceService;
 using Brkyzdmr.Services.EventService;
 using Brkyzdmr.Services.UIService;
 using RollingDice.Runtime.Event;
@@ -19,6 +20,8 @@ namespace RollingDice.Runtime.Dice
         private IEventService _eventService;
         private IConfigService _configService;
         private ICounterHandler _counterHandler;
+        private int _remainingDiceCount;
+        private int _maxDiceCount;
 
         private void Awake()
         {
@@ -49,18 +52,20 @@ namespace RollingDice.Runtime.Dice
         private void OnGameConfigLoaded()
         {
             _counterHandler.SetMinMax(0, _configService.gameConfig.maxDiceCount);
+            _maxDiceCount = _configService.gameConfig.maxDiceCount;
         }
 
         private void ChangeCount(int change)
         {
-            int newValue = _counterHandler.Value + change;
+            int newValue = _counterHandler.Value + change < 0 ? 0 : _counterHandler.Value + change;
+            
             _eventService.Get<OnDiceCountChanged>().Execute(newValue);
-            _eventService.Get<OnGuaranteeCountChanged>().Execute();
         }
 
         private void UpdateCountText(int value)
         {
-            _counterHandler.SetValue(value);
+            _remainingDiceCount = _maxDiceCount - value;
+            _counterHandler.ChechIsValueValid(value, _remainingDiceCount);
             UpdateUI();
         }
 

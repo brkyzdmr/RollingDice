@@ -56,6 +56,8 @@ namespace RollingDice.Runtime.Managers
 
         private void ThrowTheDice()
         {
+            if (_diceService.diceCount <= 0) { return; }
+            
             _diceService.RollTheDice(dicePrefab);
         }
     }
