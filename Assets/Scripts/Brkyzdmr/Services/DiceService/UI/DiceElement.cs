@@ -2,62 +2,111 @@
 using Brkyzdmr.Services.UIService;
 using RollingDice.Runtime.Event;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 namespace Brkyzdmr.Services.DiceService
 {
-    public class DiceElement : Counter
+    public class DiceElement : MonoBehaviour
     {
         [SerializeField] private DiceValue diceValue = DiceValue.One;
         [SerializeField] private int diceValueCount = 0;
-        [SerializeField] private UIDiceGuarantee diceGuarantee;
-        
-        protected override void Start()
+        [SerializeField] private DiceGuarantee diceGuarantee;
+
+        [SerializeField] private TMP_Text countText;
+        [SerializeField] private Button increaseButton;
+        [SerializeField] private Button decreaseButton;
+
+        private CounterHandler _counterHandler;
+        private IEventService _eventService;
+        private IDiceService _diceService;
+
+        private void Awake()
         {
-            base.Start();
+            _diceService = Services.GetService<IDiceService>();
+            _eventService = Services.GetService<IEventService>();
+            _counterHandler = new CounterHandler(0, 50);
+            _counterHandler.OnValueZero.AddListener(OnValueZero);
+            _counterHandler.OnValueMax.AddListener(OnValueMax);
+            _counterHandler.OnValueValid.AddListener(OnValueValid);
+        }
+
+        private void Start()
+        {
+            increaseButton.onClick.AddListener(PlusValue);
+            decreaseButton.onClick.AddListener(MinusValue);
             UpdateUI();
         }
-        
-        protected virtual void OnEnable()
+
+        private void OnEnable()
         {
-            EventService.Get<OnGuaranteeCountChanged>().AddListener(ChangeGuaranteeCount);
+            _eventService.Get<OnGuaranteeCountChanged>().AddListener(UpdateUI);
         }
 
-        protected virtual void OnDisable()
+        private void OnDisable()
         {
-            EventService.Get<OnGuaranteeCountChanged>().RemoveListener(ChangeGuaranteeCount);
+            _eventService.Get<OnGuaranteeCountChanged>().RemoveListener(UpdateUI);
         }
 
-        private void ChangeGuaranteeCount(int value)
+        public void PlusValue()
         {
-            diceValueCount = value;
+            if (diceGuarantee.totalCount < _diceService.diceCount)
+            {
+                diceValueCount++;
+                UpdateState();
+            }
+        }
+
+        public void MinusValue()
+        {
+            if (diceValueCount > 0)
+            {
+                diceValueCount--;
+                UpdateState();
+            }
+        }
+
+        private void UpdateState()
+        {
+            diceGuarantee.UpdateDiceValueCount(diceValue, diceValueCount);
             UpdateUI();
-            UpdateUIMain();
+            _eventService.Get<OnGuaranteeCountChanged>().Execute();
         }
 
-        public override void UpdateUI()
+        public void UpdateUI()
         {
-            base.UpdateUI();
             countText.text = diceValueCount.ToString();
-            
+            _counterHandler.SetValue(diceValueCount);
+
             if (diceValueCount <= 0)
             {
                 OnValueZero();
+            }
+            else
+            {
+                OnValueValid();
             }
 
             if (diceGuarantee.totalCount >= diceGuarantee.diceCount)
             {
                 OnValueMax();
             }
-            else if (diceGuarantee.totalCount <= 0)
-            {
-                OnValueZero();
-            }
         }
 
-        private void UpdateUIMain()
+        private void OnValueZero()
         {
-            diceGuarantee.UpdateDiceValueCount(diceValue, diceValueCount);
+            decreaseButton.interactable = false;
+        }
+
+        private void OnValueMax()
+        {
+            increaseButton.interactable = false;
+        }
+
+        private void OnValueValid()
+        {
+            increaseButton.interactable = true;
+            decreaseButton.interactable = true;
         }
     }
 }

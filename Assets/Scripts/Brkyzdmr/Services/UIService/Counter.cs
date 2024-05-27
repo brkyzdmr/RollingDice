@@ -33,7 +33,7 @@ namespace Brkyzdmr.Services.UIService
             UpdateUI();
         }
 
-        protected void ChangeCount(int change)
+        protected virtual void ChangeCount(int change)
         {
             int newValue = CounterHandler.value + change;
             EventService.Get<OnDiceCountChanged>().Execute(newValue);

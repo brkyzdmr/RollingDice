@@ -16,12 +16,12 @@ namespace Brkyzdmr.Services.DiceService
             set
             {
                 _diceCount = value;
-                // targetedResult.Clear();
-                // Debug.Log("diceCount:" + diceCount);
-                // for (int i = 0; i < _diceCount; i++)
-                // {
-                //     targetedResult.Add(DiceValue.Any);
-                // }
+                targetedResult.Clear();
+                Debug.Log("diceCount:" + diceCount);
+                for (int i = 0; i < _diceCount; i++)
+                {
+                    targetedResult.Add(DiceValue.Any);
+                }
             }
         }
 
