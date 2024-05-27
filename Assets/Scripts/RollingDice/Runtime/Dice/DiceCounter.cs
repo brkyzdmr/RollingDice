@@ -1,4 +1,5 @@
-﻿using Brkyzdmr.Services;
+﻿using System;
+using Brkyzdmr.Services;
 using Brkyzdmr.Services.EventService;
 using Brkyzdmr.Services.UIService;
 using RollingDice.Runtime.Event;
@@ -21,9 +22,9 @@ namespace RollingDice.Runtime.Dice
         {
             _eventService = Services.GetService<IEventService>();
             _counterHandler = new CounterHandler(0, 50);
-            _counterHandler.OnValueZero.AddListener(OnValueZero);
-            _counterHandler.OnValueMax.AddListener(OnValueMax);
-            _counterHandler.OnValueValid.AddListener(OnValueValid);
+            _counterHandler.OnValueZero += OnValueZero;
+            _counterHandler.OnValueMax += OnValueMax;
+            _counterHandler.OnValueValid += OnValueValid;
         }
         
         private void Start()
@@ -32,7 +33,14 @@ namespace RollingDice.Runtime.Dice
             decreaseButton.onClick.AddListener(() => ChangeCount(-1));
             UpdateUI();
         }
-        
+
+        private void OnDestroy()
+        {
+            _counterHandler.OnValueZero -= OnValueZero;
+            _counterHandler.OnValueMax -= OnValueMax;
+            _counterHandler.OnValueValid -= OnValueValid;
+        }
+
         private void OnEnable()
         {
             _eventService.Get<OnDiceCountChanged>().AddListener(UpdateCountText);
@@ -45,20 +53,20 @@ namespace RollingDice.Runtime.Dice
 
         private void ChangeCount(int change)
         {
-            int newValue = _counterHandler.value + change;
+            int newValue = _counterHandler.Value + change;
             _eventService.Get<OnDiceCountChanged>().Execute(newValue);
             _eventService.Get<OnGuaranteeCountChanged>().Execute();
         }
 
         private void UpdateCountText(int value)
         {
-            _counterHandler.SetValue(value);
-            countText.text = _counterHandler.value.ToString();
+            _counterHandler.ChangeValue(value);
+            countText.text = _counterHandler.Value.ToString();
         }
 
         private void UpdateUI()
         {
-            countText.text = _counterHandler.value.ToString();
+            countText.text = _counterHandler.Value.ToString();
         }
 
         private void OnValueZero()

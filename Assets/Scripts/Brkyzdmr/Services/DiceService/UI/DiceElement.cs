@@ -1,4 +1,5 @@
-﻿using Brkyzdmr.Services.EventService;
+﻿using System;
+using Brkyzdmr.Services.EventService;
 using Brkyzdmr.Services.UIService;
 using RollingDice.Runtime.Event;
 using UnityEngine;
@@ -26,9 +27,9 @@ namespace Brkyzdmr.Services.DiceService
             _diceService = Services.GetService<IDiceService>();
             _eventService = Services.GetService<IEventService>();
             _counterHandler = new CounterHandler(0, 50);
-            _counterHandler.OnValueZero.AddListener(OnValueZero);
-            _counterHandler.OnValueMax.AddListener(OnValueMax);
-            _counterHandler.OnValueValid.AddListener(OnValueValid);
+            _counterHandler.OnValueZero += OnValueZero;
+            _counterHandler.OnValueMax += OnValueMax;
+            _counterHandler.OnValueValid += OnValueValid;
         }
 
         private void Start()
@@ -36,6 +37,13 @@ namespace Brkyzdmr.Services.DiceService
             increaseButton.onClick.AddListener(PlusValue);
             decreaseButton.onClick.AddListener(MinusValue);
             UpdateUI();
+        }
+
+        private void OnDestroy()
+        {
+            _counterHandler.OnValueZero -= OnValueZero;
+            _counterHandler.OnValueMax -= OnValueMax;
+            _counterHandler.OnValueValid -= OnValueValid;
         }
 
         private void OnEnable()
@@ -76,7 +84,7 @@ namespace Brkyzdmr.Services.DiceService
         public void UpdateUI()
         {
             countText.text = diceValueCount.ToString();
-            _counterHandler.SetValue(diceValueCount);
+            _counterHandler.ChangeValue(diceValueCount);
 
             if (diceValueCount <= 0)
             {
