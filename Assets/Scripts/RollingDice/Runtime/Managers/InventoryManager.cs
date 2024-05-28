@@ -9,6 +9,7 @@ using Brkyzdmr.Services.ConfigService;
 using Brkyzdmr.Services.EventService;
 using Brkyzdmr.Services.InventoryService;
 using Brkyzdmr.Services.ObjectPoolService;
+using RollingDice.Runtime.Board;
 using RollingDice.Runtime.Event;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -39,11 +40,13 @@ namespace RollingDice.Runtime.Managers
         private void OnEnable()
         {
             _eventService.Get<OnGameConfigLoaded>().AddListener(OnGameConfigLoaded);
+            _eventService.Get<OnItemCollected>().AddListener(OnItemCollected);
         }
 
         private void OnDisable()
         {
-            _eventService.Get<OnGameConfigLoaded>().RemoveListener(OnGameConfigLoaded);
+            _eventService.Get<OnItemCollected>().RemoveListener(OnItemCollected);
+            _eventService.Get<OnItemCollected>().RemoveListener(OnItemCollected);
         }
 
         private void OnGameConfigLoaded()
@@ -78,12 +81,16 @@ namespace RollingDice.Runtime.Managers
 
             _inventoryService.items[itemConfig.id] = goalTile;
         }
-
-        [Button]
-        private void AddItemToInventory()
+        
+        private void OnItemCollected(ItemData itemData)
         {
-            var itemObj = _objectPoolService.Spawn("strawberry").Result;
-            _inventoryService.UpdateItem(itemObj, _configService.itemConfigs["0"], 5);
+            if (itemData.config.id == "")
+            {
+                return;
+            }
+            var itemObj = _objectPoolService.Spawn(itemData.config.name).Result;
+            _inventoryService.UpdateItem(itemObj, itemData.config, itemData.count);
+            
         }
     }
 }

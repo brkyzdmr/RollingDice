@@ -10,7 +10,8 @@ namespace Brkyzdmr.Services.ConfigService
         public string name;
         public string boardId;
         public bool isRandom;
-        // Tiles
+        public List<string> tiles;
+        public List<int> rewards;
         public int diceCount;
         public List<GoalConfig> goals;
     }

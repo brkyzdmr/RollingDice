@@ -97,7 +97,6 @@ namespace RollingDice.Runtime.Board
         {
             while (tilesToMove == -1 || _tilesMoved < tilesToMove) // Check if we should keep moving
             {
-                var currentTile = board.Tiles[_currentTileIndex].transform;
                 int nextTileIndex = (_currentTileIndex + _direction + board.Tiles.Count) % board.Tiles.Count; // Ensure positive index
                 var nextTile = board.Tiles[nextTileIndex].transform;
 
@@ -115,7 +114,9 @@ namespace RollingDice.Runtime.Board
                 _tilesMoved++; // Increment the number of tiles moved
             }
             
+            var currentTile = board.Tiles[_currentTileIndex];
             _eventService.Get<OnAvatarMoveCompleted>().Execute();
+            _eventService.Get<OnItemCollected>().Execute(currentTile.ItemData);
             ResetTileCounter();
         }
 

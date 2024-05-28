@@ -18,7 +18,6 @@ namespace RollingDice.Runtime.UI.Panels
         [SerializeField] private Button rollDiceButton;
         [SerializeField] private DiceResult diceResult;
         [SerializeField] private float resultShowDuration = 2f;
-        
 
         private IEventService _eventService;
         private IDiceService _diceService;
@@ -49,6 +48,7 @@ namespace RollingDice.Runtime.UI.Panels
         private void OnDisable()
         {
             _eventService.Get<OnDiceRolled>().RemoveListener(SetDiceResultText);
+
         }
 
         private void SetDiceResultStatus(bool status)

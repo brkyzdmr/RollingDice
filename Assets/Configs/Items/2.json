@@ -2,5 +2,6 @@
   "id": "2",
   "name": "pear",
   "iconPath": "Inventory/pear_icon.png",
+  "color": "255,231,97",
   "prefabPath": "Items/Pear.prefab"
 }

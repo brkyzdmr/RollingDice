@@ -2,5 +2,6 @@
   "id": "1",
   "name": "apple",
   "iconPath": "Inventory/apple_icon.png",
+  "color": "100,199,115",
   "prefabPath": "Items/Apple.prefab"
 }

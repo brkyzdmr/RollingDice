@@ -60,6 +60,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -5655524011153493608, guid: c58f119a3ef949843a702ccbb707b1cb,
         type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -5655524011153493608, guid: c58f119a3ef949843a702ccbb707b1cb,
+        type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: a8dd85c1627b9ab4aaf56dc42f64397d, type: 2}
@@ -72,6 +77,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Tile_Model_03
+      objectReference: {fileID: 0}
+    - target: {fileID: 4057205631345769548, guid: c58f119a3ef949843a702ccbb707b1cb,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4057205631345769548, guid: c58f119a3ef949843a702ccbb707b1cb,
         type: 3}
@@ -135,12 +145,12 @@ PrefabInstance:
         type: 3}
       propertyPath: ProgressUp
       value: 
-      objectReference: {fileID: 1267014768378340947}
+      objectReference: {fileID: 1754375113312676743}
     - target: {fileID: -4014441220564706109, guid: 1f654fe0811068d4c9959225259f9721,
         type: 3}
       propertyPath: ProgressDown
       value: 
-      objectReference: {fileID: 1754375113312676743}
+      objectReference: {fileID: 1267014768378340947}
     - target: {fileID: 72946376312791338, guid: 1f654fe0811068d4c9959225259f9721,
         type: 3}
       propertyPath: m_Name

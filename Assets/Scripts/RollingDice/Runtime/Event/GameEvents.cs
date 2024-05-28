@@ -2,6 +2,7 @@
 using Brkyzdmr.Services.ConfigService;
 using Brkyzdmr.Services.EventService;
 using Brkyzdmr.Services.UIService;
+using RollingDice.Runtime.Board;
 
 namespace RollingDice.Runtime.Event
 {
@@ -28,5 +29,6 @@ namespace RollingDice.Runtime.Event
     public class OnDiceRolled : GameEvent<List<int>> { }
     public class OnDiceCountChanged : GameEvent<int> { }
     public class OnAvatarMoveCompleted : GameEvent { }
+    public class OnItemCollected : GameEvent<ItemData> { }
     public class OnInventoryCreated : GameEvent { }
 }
