@@ -3,6 +3,7 @@ using System.Linq;
 using Brkyzdmr.Helpers;
 using Brkyzdmr.Services.AnimationRecorderService;
 using Brkyzdmr.Services.EventService;
+using Brkyzdmr.Services.ObjectPoolService;
 using RollingDice.Runtime.Event;
 using UnityEngine;
 
@@ -30,6 +31,7 @@ namespace Brkyzdmr.Services.DiceService
         private List<Transform> _startPositions;
         private IAnimationRecorderService _animationRecorderService;
         private readonly IEventService _eventService = Services.GetService<IEventService>();
+        private IObjectPoolService _objectPoolService = Services.GetService<IObjectPoolService>();
         private int _diceCount;
 
         public void InitializeStartPositions(Transform startPositionRoot)
@@ -100,16 +102,16 @@ namespace Brkyzdmr.Services.DiceService
 
         private void GenerateDice(GameObject dicePrefab, int diceCount)
         {
-            AdjustDiceListSize(dicePrefab, diceCount);
+            AdjustDiceListSize(diceCount);
             var randomStartPosition = _startPositions[Random.Range(0, _startPositions.Count)];
             SetDiceInitialState(diceCount, randomStartPosition);
         }
 
-        private void AdjustDiceListSize(GameObject dicePrefab, int diceCount)
+        private void AdjustDiceListSize(int diceCount)
         {
             if (diceCount > diceDataList.Count)
             {
-                AddDice(dicePrefab, diceCount - diceDataList.Count);
+                AddDice(diceCount - diceDataList.Count);
             }
             else if (diceCount < diceDataList.Count)
             {
@@ -117,22 +119,28 @@ namespace Brkyzdmr.Services.DiceService
             }
         }
 
-        private void AddDice(GameObject dicePrefab, int diceCount)
+        private void AddDice(int diceCount)
         {
             for (int i = 0; i < diceCount; i++)
             {
-                DiceData newDiceData = new DiceData(Object.Instantiate(dicePrefab));
+                var diceObject = _objectPoolService.Spawn("dice").Result;
+                DiceData newDiceData = new DiceData(diceObject);
                 diceDataList.Add(newDiceData);
             }
         }
-
+        
         private void DisposeExtraDice(int diceToDispose)
         {
-            for (int i = diceDataList.Count - diceToDispose - 1; i < diceDataList.Count; i++)
+            diceToDispose = Mathf.Min(diceToDispose, diceDataList.Count);
+
+            for (int i = 0; i < diceToDispose; i++)
             {
-                diceDataList[i].diceObject.transform.position = Vector3.down * 10000;
+                var diceObject = diceDataList[^1].diceObject;
+                _objectPoolService.Despawn("dice", diceObject);
+                diceDataList.RemoveAt(diceDataList.Count - 1);
             }
         }
+
 
         private void SetDiceInitialState(int count, Transform startPosition)
         {

@@ -51,7 +51,6 @@ namespace RollingDice.Runtime.Managers
         private void ChangeDiceCount(int diceCount)
         {
             _diceService.diceCount = diceCount;
-            Debug.Log("ChangeDiceCount");
         }
 
         private void ThrowTheDice()

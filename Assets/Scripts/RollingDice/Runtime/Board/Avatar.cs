@@ -8,6 +8,7 @@ using Brkyzdmr.Services.CoroutineService;
 using Brkyzdmr.Services.EventService;
 using RollingDice.Runtime.Event;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace RollingDice.Runtime.Board
 {
@@ -16,11 +17,14 @@ namespace RollingDice.Runtime.Board
         public Board board;
 
         [SerializeField] private int tilesToMove = -1; // -1 for infinite movement
+        [SerializeField] private AnimationCurve moveSpeedCurve;
+        
 
         [Header("Jump")]
         [SerializeField] private float jumpHeight = 2f;
 
-        [SerializeField] private float jumpDuration = 1f;
+        [SerializeField] private float minJumpDuration = 1f;
+        [SerializeField] private float maxJumpDuration = 1f;
         [SerializeField] private AnimationCurve jumpRiseCurve;
         [SerializeField] private AnimationCurve jumpFallCurve;
 
@@ -39,6 +43,7 @@ namespace RollingDice.Runtime.Board
         private int _currentTileIndex = 0;
         private int _direction = 1; // 1 for forward, -1 for backward
         private int _tilesMoved = 0;
+        private List<float> _jumpDurationList;
 
 
         private void Awake()
@@ -47,6 +52,7 @@ namespace RollingDice.Runtime.Board
             _eventService = Services.GetService<IEventService>();
 
             _jumpHandler = new JumpHandler(_coroutineService);
+            _jumpDurationList = new List<float>();
         }
         
         private void OnEnable()
@@ -62,7 +68,29 @@ namespace RollingDice.Runtime.Board
         private void MoveThroughTiles(List<int> diceResults)
         {
             tilesToMove = diceResults.Sum();
+
+            CalculateMoveDuration(tilesToMove);
+            
             StartCoroutine(MoveThroughTilesCo());
+        }
+
+        private void CalculateMoveDuration(int tileCount)
+        {
+            _jumpDurationList.Clear();
+            float totalDuration = 0f;
+
+            for (int i = 0; i < tileCount; i++)
+            {
+                float modifiedDuration = moveSpeedCurve.Evaluate((float)i / (float)tileCount);
+        
+                // Clamp the modified duration to ensure it falls within the specified range
+                modifiedDuration = Mathf.Clamp(modifiedDuration, minJumpDuration, maxJumpDuration);
+
+                _jumpDurationList.Add(modifiedDuration);
+                totalDuration += modifiedDuration;
+            }
+            
+            Debug.Log("Total Duration: " + totalDuration);
         }
 
         private IEnumerator MoveThroughTilesCo()
@@ -74,7 +102,7 @@ namespace RollingDice.Runtime.Board
                 var nextTile = board.Tiles[nextTileIndex].transform;
 
                 bool isMoving = true;
-                _jumpHandler.Jump(gameObject, transform.position, nextTile.position, jumpHeight, jumpDuration,
+                _jumpHandler.Jump(gameObject, transform.position, nextTile.position, jumpHeight, _jumpDurationList[_tilesMoved],
                     jumpRiseCurve, jumpFallCurve, () =>
                     {
                         isMoving = false;

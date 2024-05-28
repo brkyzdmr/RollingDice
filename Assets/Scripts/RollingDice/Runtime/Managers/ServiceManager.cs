@@ -28,13 +28,13 @@ namespace RollingDice.Runtime.Managers
         {
             Services.RegisterService<ICoroutineService>(new CoroutineService());
             Services.RegisterService<IEventService>(new EventService());
+            Services.RegisterService<IObjectPoolService>(new ObjectPoolService());
             Services.RegisterService<IVibrationService>(new NiceVibrationService());
             Services.RegisterService<ISaveService>(new PlayerPrefsSaveService());
             Services.RegisterService<IAssetLoaderService>(new AddressablesLoaderService());
             Services.RegisterService<IDiceService>(new DiceService());
             Services.RegisterService<IConfigService>(new ConfigService());
             Services.RegisterService<IInputService>(new UnityInputService());
-            Services.RegisterService<IObjectPoolService>(new ObjectPoolService());
             Services.RegisterService<IUIService>(new UIService());
             // Services.RegisterService<IGoalService>(new GoalService());
             // Services.RegisterService<IMatchService>(new MatchService());
