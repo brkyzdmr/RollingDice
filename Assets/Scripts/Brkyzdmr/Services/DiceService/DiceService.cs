@@ -47,12 +47,12 @@ namespace Brkyzdmr.Services.DiceService
         {
             _animationRecorderService = Services.GetService<IAnimationRecorderService>();
             
-            GenerateDice(dicePrefab, diceCount);
-            List<GameObject> diceList = GetGeneratedDiceObjects(diceCount);
+            GenerateDice();
+            List<GameObject> diceList = GetGeneratedDiceObjects();
             _animationRecorderService.StartSimulation(diceList);
             RecordDiceRollResults();
             _animationRecorderService.ResetToInitialState();
-            SetTargetedResults();
+            SetTargetDiceValues();
             _animationRecorderService.PlayRecording(() =>
             {
                 _eventService.Get<OnDiceRolled>().Execute(GetDiceResults());
@@ -74,7 +74,7 @@ namespace Brkyzdmr.Services.DiceService
             return diceResults;
         }
 
-        private List<GameObject> GetGeneratedDiceObjects(int diceCount)
+        private List<GameObject> GetGeneratedDiceObjects()
         {
             List<GameObject> diceList = new List<GameObject>();
             for (int i = 0; i < diceCount; i++)
@@ -92,7 +92,7 @@ namespace Brkyzdmr.Services.DiceService
             }
         }
 
-        private void SetTargetedResults()
+        private void SetTargetDiceValues()
         {
             for (int i = 0; i < targetedResult.Count; i++)
             {
@@ -100,14 +100,14 @@ namespace Brkyzdmr.Services.DiceService
             }
         }
 
-        private void GenerateDice(GameObject dicePrefab, int diceCount)
+        private void GenerateDice()
         {
-            AdjustDiceListSize(diceCount);
+            AdjustDiceListSize();
             var randomStartPosition = _startPositions[Random.Range(0, _startPositions.Count)];
             SetDiceInitialState(diceCount, randomStartPosition);
         }
 
-        private void AdjustDiceListSize(int diceCount)
+        private void AdjustDiceListSize()
         {
             if (diceCount > diceDataList.Count)
             {
@@ -119,9 +119,9 @@ namespace Brkyzdmr.Services.DiceService
             }
         }
 
-        private void AddDice(int diceCount)
+        private void AddDice(int diceToAddCount)
         {
-            for (int i = 0; i < diceCount; i++)
+            for (int i = 0; i < diceToAddCount; i++)
             {
                 var diceObject = _objectPoolService.Spawn("dice").Result;
                 DiceData newDiceData = new DiceData(diceObject);
@@ -129,11 +129,11 @@ namespace Brkyzdmr.Services.DiceService
             }
         }
         
-        private void DisposeExtraDice(int diceToDispose)
+        private void DisposeExtraDice(int diceToDisposeCount)
         {
-            diceToDispose = Mathf.Min(diceToDispose, diceDataList.Count);
+            diceToDisposeCount = Mathf.Min(diceToDisposeCount, diceDataList.Count);
 
-            for (int i = 0; i < diceToDispose; i++)
+            for (int i = 0; i < diceToDisposeCount; i++)
             {
                 var diceObject = diceDataList[^1].diceObject;
                 _objectPoolService.Despawn("dice", diceObject);
@@ -142,15 +142,15 @@ namespace Brkyzdmr.Services.DiceService
         }
 
 
-        private void SetDiceInitialState(int count, Transform startPosition)
+        private void SetDiceInitialState(int totalDiceCount, Transform startPosition)
         {
-            int gridDimension = Mathf.CeilToInt(Mathf.Pow(count, 1.0f / 3.0f));
-            List<Vector3> gridPositions = GridHelper.GenerateGridPositions(count, gridDimension, startPosition,
+            int gridDimension = Mathf.CeilToInt(Mathf.Pow(totalDiceCount, 1.0f / 3.0f));
+            List<Vector3> gridPositions = GridHelper.GenerateGridPositions(totalDiceCount, gridDimension, startPosition,
                 diceDataList[0].rb.transform.localScale);
 
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < totalDiceCount; i++)
             {
-                InitialState initial = SetInitialState(diceDataList[i], gridPositions[i]);
+                InitialState initial = SetInitialState(gridPositions[i]);
                 diceDataList[i].diceLogic.Reset();
                 diceDataList[i].diceContact.Reset();
                 diceDataList[i].diceObject.transform.position = initial.position;
@@ -162,7 +162,7 @@ namespace Brkyzdmr.Services.DiceService
             }
         }
 
-        private InitialState SetInitialState(DiceData diceData, Vector3 position)
+        private InitialState SetInitialState(Vector3 position)
         {
             Quaternion rotation = MathHelper.GetRandomRotation();
             Vector3 force = PhysicsHelper.CalculateProjectileLaunchVelocity(position, Vector3.zero);
