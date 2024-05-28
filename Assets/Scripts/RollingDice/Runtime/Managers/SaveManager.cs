@@ -4,6 +4,7 @@ using Brkyzdmr.Generics.Singletons;
 using Brkyzdmr.Services;
 using Brkyzdmr.Services.ConfigService;
 using Brkyzdmr.Services.EventService;
+using Brkyzdmr.Services.InventoryService;
 using Brkyzdmr.Services.SaveService;
 using RollingDice.Runtime.Board;
 using RollingDice.Runtime.Event;
@@ -24,6 +25,7 @@ namespace RollingDice.Runtime.Managers
             _saveService = Services.GetService<ISaveService>();
             _configService = Services.GetService<IConfigService>();
             _eventService = Services.GetService<IEventService>();
+            
             await LoadGameConfig();
 
             SetCurrentLevelConfig();
@@ -54,6 +56,7 @@ namespace RollingDice.Runtime.Managers
             _configService.SetNextLevelConfig();
             _saveService.SetString(SaveData.CurrentLevelId, _configService.currentLevelConfig.id);
         }
+        
 
         private void SetCurrentLevelConfig()
         {

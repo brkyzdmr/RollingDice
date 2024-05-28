@@ -69,23 +69,5 @@ namespace Brkyzdmr.Services.InventoryService
                 items[id].itemCountText.text = Mathf.Max(itemTracker[id], 0).ToString();
             } 
         }
-        
-        private IEnumerator DoMove(GameObject itemObj, Vector3 targetPosition, float duration, System.Action onComplete)
-        {
-            Vector3 startPosition = itemObj.transform.position;
-            float time = 0;
-
-            while (time < duration)
-            {
-                time += Time.deltaTime;
-                float t = time / duration;
-                itemObj.transform.position = Vector3.Lerp(startPosition, targetPosition, t);
-                yield return null;
-            }
-
-            itemObj.transform.position = targetPosition;
-
-            onComplete?.Invoke();
-        }
     }
 }
