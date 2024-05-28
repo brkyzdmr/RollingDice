@@ -17,7 +17,7 @@
 ## Description
 
 ### Duration
-It tooks 5-6 work days to complete. The main pain point was the project developed without 3rdParty tools in code side.
+It tooks 5-6 work days to complete. The main pain point was the project developed without 3rdParty tools in code side. I developed simple [Tween Tool](Assets/Scripts/Brkyzdmr/Tools/Tween) for this project.
 
 https://github.com/brkyzdmr/RollingDice/assets/18557060/e95be273-ef5d-49fb-9551-0154bfbf0a74
 
