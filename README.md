@@ -19,6 +19,10 @@
 ### Duration
 It tooks 5-6 work days to complete.
 
+https://github.com/brkyzdmr/RollingDice/assets/18557060/e95be273-ef5d-49fb-9551-0154bfbf0a74
+
+
+
 ## Game Config
 Basic game config can controlled by [GameConfig.json](Assets/Configs/gameConfig.json).
 ```json
