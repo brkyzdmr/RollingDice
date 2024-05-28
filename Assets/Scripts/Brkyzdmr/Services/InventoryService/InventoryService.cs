@@ -53,6 +53,7 @@ namespace Brkyzdmr.Services.InventoryService
                 }
                 else
                 {
+                    itemObj.SetActive(false);
                     itemTracker[item.id] += itemCount;
                     UpdateItemText(item.id);
                 }

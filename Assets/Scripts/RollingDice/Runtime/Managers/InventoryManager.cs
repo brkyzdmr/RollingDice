@@ -21,7 +21,6 @@ namespace RollingDice.Runtime.Managers
         [SerializeField] private GameObject inventoryItem;
         [SerializeField] private Transform inventoryTransform;
         
-        
         private IInventoryService _inventoryService;
         private IConfigService _configService;
         private IEventService _eventService;
@@ -90,7 +89,6 @@ namespace RollingDice.Runtime.Managers
             }
             var itemObj = _objectPoolService.Spawn(itemData.config.name).Result;
             _inventoryService.UpdateItem(itemObj, itemData.config, itemData.count);
-            
         }
     }
 }

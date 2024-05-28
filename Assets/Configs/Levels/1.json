@@ -1,0 +1,15 @@
+{
+  "id": "1",
+  "name": "Level 1",
+  "boardId": "rect_1",
+  "isRandom": true,
+  "diceCount": 2,
+  "tiles": [],
+  "rewards": [],
+  "goals": [
+    {
+      "id": "pear",
+      "count": 15
+    }
+  ]
+}

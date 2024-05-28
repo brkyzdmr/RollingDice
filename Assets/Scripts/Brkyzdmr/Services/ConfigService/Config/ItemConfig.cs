@@ -11,7 +11,13 @@ namespace Brkyzdmr.Services.ConfigService
         public string iconPath;
         public string color;
         public string prefabPath;
-        
+
+        public ItemConfig(string id, string name)
+        {
+            this.id = id;
+            this.name = name;
+        }
+
         public Color GetColor()
         {
             string[] rgb = color.Split(',');
