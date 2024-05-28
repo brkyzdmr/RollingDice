@@ -52,12 +52,22 @@ namespace Brkyzdmr.Services.ConfigService
             return nextLevelId ?? levelConfigs.Keys.First();
         }
         
-        public async Task LoadConfigs(string gameConfigPath, string boardConfigsBasePath, 
-            string itemConfigsBasePath, string avatarConfigsBasePath)
+        public async Task LoadConfigs(string gameConfigPath)
         {
             var gameConfigText = await _assetLoaderService.LoadAsset<TextAsset>(gameConfigPath);
             gameConfig = JsonConvert.DeserializeObject<GameConfig>(gameConfigText.text);
+            
+            await LoadLevelConfigs();
+            await LoadBoardConfigs();
+            await LoadItemConfigs();
+            await LoadAvatarConfigs();
+             
 
+            await Task.Yield();
+        }
+        
+        private async Task LoadLevelConfigs()
+        {
             foreach (var levelPath in gameConfig.levelOrder)
             {
                 try
@@ -71,59 +81,65 @@ namespace Brkyzdmr.Services.ConfigService
                     Debug.LogError($"Error loading level from path {levelPath}: {ex.Message}");
                 }
             }
-
-            await LoadBoardConfigs(boardConfigsBasePath);
-            await LoadItemConfigs(itemConfigsBasePath);
-            await LoadAvatarConfigs(avatarConfigsBasePath);
-             
-
+            
             await Task.Yield();
         }
 
-        private async Task LoadBoardConfigs(string boardConfigsBasePath)
+        private async Task LoadBoardConfigs()
         {
-            await LoadConfigs(boardConfigsBasePath, boardConfigs);
-        }
-
-        private async Task LoadItemConfigs(string itemConfigsBasePath)
-        {
-            await LoadConfigs(itemConfigsBasePath, itemConfigs);
-        }
-
-        private async Task LoadAvatarConfigs(string avatarConfigsBasePath)
-        {
-            await LoadConfigs(avatarConfigsBasePath, avatarConfigs);
-        }
-
-        private async Task LoadConfigs<T>(string basePath, Dictionary<string, T> configDictionary)
-        {
-            try
+            foreach (var boardPath in gameConfig.boards)
             {
-                var configPaths = await _assetLoaderService.LoadAllAssetPaths<TextAsset>(basePath);
-
-                foreach (var configPath in configPaths)
+                try
                 {
-                    try
-                    {
-                        var configText = await _assetLoaderService.LoadAsset<TextAsset>(configPath);
-                        var config = JsonConvert.DeserializeObject<T>(configText.text);
-                        var idProperty = typeof(T).GetProperty("id");
-                        if (idProperty != null)
-                        {
-                            var id = (string)idProperty.GetValue(config);
-                            configDictionary[id] = config;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.LogError($"Error loading config from path {configPath}: {ex.Message}");
-                    }
+                    var boardConfigText = await _assetLoaderService.LoadAsset<TextAsset>(boardPath);
+                    var boardConfig = JsonConvert.DeserializeObject<BoardConfig>(boardConfigText.text); 
+                    boardConfigs[boardConfig.id] = boardConfig;
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogError($"Error loading board from path {boardPath}: {ex.Message}");
                 }
             }
-            catch (Exception ex)
+            
+            await Task.Yield();
+        }
+
+        private async Task LoadItemConfigs()
+        {
+            foreach (var itemPath in gameConfig.items)
             {
-                Debug.LogError($"Error loading config paths from base path {basePath}: {ex.Message}");
+                try
+                {
+                    var itemConfigText = await _assetLoaderService.LoadAsset<TextAsset>(itemPath);
+                    var itemConfig = JsonConvert.DeserializeObject<ItemConfig>(itemConfigText.text); 
+                    itemConfigs[itemConfig.id] = itemConfig;
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogError($"Error loading item from path {itemPath}: {ex.Message}");
+                }
             }
+            
+            await Task.Yield();
+        }
+
+        private async Task LoadAvatarConfigs()
+        {
+            foreach (var avatarPath in gameConfig.avatars)
+            {
+                try
+                {
+                    var avatarConfigText = await _assetLoaderService.LoadAsset<TextAsset>(avatarPath);
+                    var avatarConfig = JsonConvert.DeserializeObject<ItemConfig>(avatarConfigText.text); 
+                    itemConfigs[avatarConfig.id] = avatarConfig;
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogError($"Error loading avatar from path {avatarPath}: {ex.Message}");
+                }
+            }
+            
+            await Task.Yield();
         }
     }
 }

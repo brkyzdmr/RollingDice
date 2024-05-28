@@ -10,30 +10,25 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: Items
+  m_Name: Inventory
   m_EditorClassIdentifier: 
-  m_GroupName: Items
+  m_GroupName: Inventory
   m_Data:
     m_SerializedData: []
-  m_GUID: 300ce885067125e418dc1a082aa1bb0f
+  m_GUID: 9393f19587eb4d54ca022306ebd88997
   m_SerializeEntries:
-  - m_GUID: 71708c6ace75d764bb7302446c13b5f8
-    m_Address: Items/Dice.prefab
+  - m_GUID: 783b914ab844f024dbd1e25d103c0e7a
+    m_Address: Inventory/apple_icon.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 6d12386003077a749aa794225b8f295f
-    m_Address: Items/Pear.prefab
+  - m_GUID: 253ebc9f17a6cef449385d702d7f4f6d
+    m_Address: Inventory/strawberry_icon.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 56108237b0ec1fa40a4b355173dcf47b
-    m_Address: Items/Strawberry.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 0d1feb7913d920947b5d5f6b02c7831a
-    m_Address: Items/Apple.prefab
+  - m_GUID: 99dba54b236645d478e40c6ff1c441fd
+    m_Address: Inventory/pear_icon.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -41,5 +36,5 @@ MonoBehaviour:
   m_Settings: {fileID: 11400000, guid: d1efed95e75bd664884ff087f22509d9, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: 2d201868b43912543995b07f91bf9df0, type: 2}
-    - {fileID: 11400000, guid: 35f8aee95ab7bac4da1b1b4b31aa9da3, type: 2}
+    - {fileID: 11400000, guid: 627681721b92aab44ae022386198916b, type: 2}
+    - {fileID: 11400000, guid: 44b25cbe8a66b344a8de60f8b92f8cf7, type: 2}

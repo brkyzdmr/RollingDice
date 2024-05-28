@@ -1,0 +1,6 @@
+{
+  "id": "2",
+  "name": "pear",
+  "iconPath": "Inventory/pear_icon.png",
+  "prefabPath": "Items/Pear.prefab"
+}

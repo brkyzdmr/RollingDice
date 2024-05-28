@@ -8,5 +8,8 @@ namespace Brkyzdmr.Services.ConfigService
     {
         public int maxDiceCount;
         public List<string> levelOrder;
+        public List<string> boards;
+        public List<string> items;
+        public List<string> avatars;
     }
 }

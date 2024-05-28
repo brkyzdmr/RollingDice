@@ -1,0 +1,13 @@
+{
+  "id": "0",
+  "name": "Tutorial",
+  "boardId": "rect_1",
+  "isRandom": false,
+  "diceCount": 2,
+  "goals": [
+    {
+      "id": "strawberry",
+      "count": 12
+    }
+  ]
+}

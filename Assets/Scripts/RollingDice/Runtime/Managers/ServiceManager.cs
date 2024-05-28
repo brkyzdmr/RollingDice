@@ -7,6 +7,7 @@ using Brkyzdmr.Services.CoroutineService;
 using Brkyzdmr.Services.DiceService;
 using Brkyzdmr.Services.EventService;
 using Brkyzdmr.Services.InputService;
+using Brkyzdmr.Services.InventoryService;
 using Brkyzdmr.Services.ObjectPoolService;
 using Brkyzdmr.Services.ParticleService;
 using Brkyzdmr.Services.SaveService;
@@ -40,6 +41,7 @@ namespace RollingDice.Runtime.Managers
             // Services.RegisterService<IMatchService>(new MatchService());
             Services.RegisterService<IParticleService>(new ParticleService());
             Services.RegisterService<ISoundService>(new SoundService());
+            Services.RegisterService<IInventoryService>(new InventoryService());
             Services.RegisterService<IAnimationRecorderService>(new AnimationRecorderService());
 
             Debug.Log("ServiceManager: Services initialized!");

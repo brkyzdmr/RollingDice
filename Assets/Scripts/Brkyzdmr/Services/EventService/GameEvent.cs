@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Brkyzdmr.Services.ConfigService;
 using UnityEngine;
 
 namespace Brkyzdmr.Services.EventService

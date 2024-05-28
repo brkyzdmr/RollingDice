@@ -1,0 +1,6 @@
+{
+  "id": "1",
+  "name": "apple",
+  "iconPath": "Inventory/apple_icon.png",
+  "prefabPath": "Items/Apple.prefab"
+}

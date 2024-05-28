@@ -9,7 +9,7 @@ namespace Brkyzdmr.Services.ConfigService
         public string id;
         public string name;
         public string iconPath;
-        public Color color;
+        // public Color color;
         public string prefabPath;
     }
 }

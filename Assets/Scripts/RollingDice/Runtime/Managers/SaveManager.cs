@@ -44,8 +44,7 @@ namespace RollingDice.Runtime.Managers
             {
                 Addressables.Release(_configService.currentLevelConfig); 
             }
-            await _configService.LoadConfigs(GameData.GameConfigPath, GameData.BoardConfigsBasePath, 
-                GameData.ItemConfigsBasePath, GameData.AvatarConfigsBasePath);
+            await _configService.LoadConfigs(GameData.GameConfigPath);
         }
         
         private void OnNextLevel()

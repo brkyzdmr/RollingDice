@@ -14,7 +14,6 @@ namespace Brkyzdmr.Services.ConfigService
         LevelConfig currentLevelConfig { get; }
         void SetCurrentLevelConfig(string id);
         void SetNextLevelConfig();
-        Task LoadConfigs(string gameConfigPath, string boardConfigsBasePath,
-            string itemConfigsBasePath, string avatarConfigsBasePath);
+        Task LoadConfigs(string gameConfigPath);
     }
 }

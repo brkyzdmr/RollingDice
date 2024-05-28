@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Brkyzdmr.Services.ConfigService;
 using Brkyzdmr.Services.EventService;
 using Brkyzdmr.Services.UIService;
 
@@ -27,4 +28,5 @@ namespace RollingDice.Runtime.Event
     public class OnDiceRolled : GameEvent<List<int>> { }
     public class OnDiceCountChanged : GameEvent<int> { }
     public class OnAvatarMoveCompleted : GameEvent { }
+    public class OnInventoryCreated : GameEvent { }
 }

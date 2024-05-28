@@ -1,6 +1,17 @@
 {
   "maxDiceCount": 50,
   "levelOrder": [
-    "Configs/Levels/1.json"
+    "Configs/Levels/0.json"
+  ],
+  "boards": [
+    "Configs/Boards/0.json"
+  ],
+  "items": [
+    "Configs/Items/0.json",
+    "Configs/Items/1.json",
+    "Configs/Items/2.json"
+  ],
+  "avatars": [
+    
   ]
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Brkyzdmr.Services.ConfigService
 {
@@ -11,5 +12,6 @@ namespace Brkyzdmr.Services.ConfigService
         public bool isRandom;
         // Tiles
         public int diceCount;
+        public List<GoalConfig> goals;
     }
 }
