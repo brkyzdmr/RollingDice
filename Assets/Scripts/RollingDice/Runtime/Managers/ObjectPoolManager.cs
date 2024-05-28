@@ -39,7 +39,7 @@ namespace RollingDice.Runtime.Managers
 
         private async void InitializePools()
         {
-            _objectPoolService.InitializePools(objectPool, _assetLoaderService);
+            await _objectPoolService.InitializePools(objectPool, _assetLoaderService);
             
             // _eventService.Get<OnPoolsInitialized>().Execute();
         }
